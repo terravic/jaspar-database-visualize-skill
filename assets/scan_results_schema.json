@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JASPAR Sequence Scan Results Schema",
+  "type": "object",
+  "required": ["matrix_id", "sequence_name", "sequence_length", "threshold", "s_min", "s_max", "hits"],
+  "properties": {
+    "matrix_id": {"type": "string"},
+    "name": {"type": "string"},
+    "sequence_name": {"type": "string"},
+    "sequence_length": {"type": "integer", "minimum": 0, "maximum": 100000},
+    "threshold": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    "s_min": {"type": "number"},
+    "s_max": {"type": "number"},
+    "total_hits": {"type": "integer", "minimum": 0},
+    "hits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end", "strand", "matched_sequence", "raw_score", "relative_score", "significance"],
+        "properties": {
+          "start": {"type": "integer", "minimum": 1},
+          "end": {"type": "integer", "minimum": 1},
+          "strand": {"type": "string", "enum": ["+", "-"]},
+          "matched_sequence": {"type": "string"},
+          "raw_score": {"type": "number"},
+          "relative_score": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "significance": {"type": "string", "enum": ["Optimal", "High", "Moderate"]}
+        }
+      }
+    }
+  }
+}

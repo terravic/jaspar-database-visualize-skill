@@ -1,0 +1,5 @@
+# Python Dependencies for jaspar-database-visualize
+# Note: All scripts operate out-of-the-box using the Python 3.10+ standard library,
+# with optional HTTP pooling and test runner support listed below.
+urllib3>=2.0.0
+pytest>=7.0.0

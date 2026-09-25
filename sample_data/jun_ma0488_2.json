@@ -1,0 +1,46 @@
+{
+  "matrix_id": "MA0488.2",
+  "base_id": "MA0488",
+  "version": "2",
+  "name": "JUN",
+  "collection": "CORE",
+  "tax_group": "vertebrates",
+  "species": [
+    {
+      "tax_id": 9606,
+      "name": "Homo sapiens"
+    }
+  ],
+  "class": [
+    "Basic leucine zipper factors (bZIP)"
+  ],
+  "family": [
+    "Jun-related factors"
+  ],
+  "superclass": "Basic domains",
+  "subfamily": "AP-1 dimeric transcription factor complex",
+  "type": "HT-SELEX",
+  "uniprot_ids": [
+    "P05412"
+  ],
+  "pdb_ids": [
+    "1FOS",
+    "1JNM"
+  ],
+  "pubmed_ids": [
+    "23332764",
+    "38015438",
+    "41289102"
+  ],
+  "tffm": {
+    "tffm_id": "TFFM0214.2",
+    "log_p_1st_order": -145.2,
+    "log_p_detailed": -158.9
+  },
+  "pfm": {
+    "A": [190, 210, 820, 15, 22, 940, 10, 18, 12, 925, 110, 180, 210, 195],
+    "C": [220, 185, 45, 10, 18, 15, 25, 935, 15, 20, 195, 620, 580, 205],
+    "G": [410, 445, 85, 12, 945, 25, 15, 22, 18, 30, 515, 105, 115, 420],
+    "T": [180, 160, 50, 963, 15, 20, 950, 25, 955, 25, 180, 95, 95, 180]
+  }
+}

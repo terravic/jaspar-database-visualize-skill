@@ -1,0 +1,46 @@
+{
+  "matrix_id": "MA0143.4",
+  "base_id": "MA0143",
+  "version": "4",
+  "name": "SOX2",
+  "collection": "CORE",
+  "tax_group": "vertebrates",
+  "species": [
+    {
+      "tax_id": 9606,
+      "name": "Homo sapiens"
+    }
+  ],
+  "class": [
+    "High-mobility group (HMG) domain factors"
+  ],
+  "family": [
+    "SOX-related factors"
+  ],
+  "superclass": "All-alpha-helical DNA-binding domains",
+  "subfamily": "SOXB1 pluripotency regulators",
+  "type": "ChIP-seq",
+  "uniprot_ids": [
+    "P48431"
+  ],
+  "pdb_ids": [
+    "1GT0",
+    "6HT5"
+  ],
+  "pubmed_ids": [
+    "18555785",
+    "38015438",
+    "41289102"
+  ],
+  "tffm": {
+    "tffm_id": "TFFM0108.4",
+    "log_p_1st_order": -98.6,
+    "log_p_detailed": -104.2
+  },
+  "pfm": {
+    "A": [165, 110, 25, 10, 15, 20, 18, 22, 25, 210],
+    "C": [510, 740, 915, 15, 10, 12, 15, 18, 15, 480],
+    "G": [155, 65, 20, 15, 12, 18, 945, 15, 20, 145],
+    "T": [170, 85, 40, 960, 963, 950, 22, 945, 940, 165]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JASPAR Motif Matrix Profile Schema",
+  "type": "object",
+  "required": ["matrix_id", "name", "pfm"],
+  "properties": {
+    "matrix_id": {
+      "type": "string",
+      "pattern": "^MA[0-9]{4}\\.[0-9]+$"
+    },
+    "base_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "collection": {
+      "type": "string",
+      "enum": ["CORE", "UNVALIDATED", "BPNET"]
+    },
+    "tax_group": {
+      "type": "string"
+    },
+    "species": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tax_id", "name"],
+        "properties": {
+          "tax_id": {"type": "integer"},
+          "name": {"type": "string"}
+        }
+      }
+    },
+    "class": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "family": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "uniprot_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "pfm": {
+      "type": "object",
+      "required": ["A", "C", "G", "T"],
+      "properties": {
+        "A": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "C": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "G": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "T": {"type": "array", "items": {"type": "number", "minimum": 0}}
+      }
+    }
+  }
+}

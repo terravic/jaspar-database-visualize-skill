@@ -1,0 +1,47 @@
+{
+  "matrix_id": "MA0106.3",
+  "base_id": "MA0106",
+  "version": "3",
+  "name": "TP53",
+  "collection": "CORE",
+  "tax_group": "vertebrates",
+  "species": [
+    {
+      "tax_id": 9606,
+      "name": "Homo sapiens"
+    }
+  ],
+  "class": [
+    "p53 domain factors"
+  ],
+  "family": [
+    "p53-related factors"
+  ],
+  "superclass": "Immunoglobulin fold",
+  "subfamily": "p53/p63/p73 tetrameric tumor suppressors",
+  "type": "ChIP-seq",
+  "uniprot_ids": [
+    "P04637"
+  ],
+  "pdb_ids": [
+    "1TUP",
+    "3KMD",
+    "4HJE"
+  ],
+  "pubmed_ids": [
+    "21324875",
+    "38015438",
+    "41289102"
+  ],
+  "tffm": {
+    "tffm_id": "TFFM0052.3",
+    "log_p_1st_order": -312.5,
+    "log_p_detailed": -338.1
+  },
+  "pfm": {
+    "A": [290, 265, 810, 15, 920, 25, 20, 30, 35, 40, 285, 250, 825, 12, 930, 20, 15, 25, 30, 45],
+    "C": [45, 55, 40, 945, 25, 35, 30, 860, 845, 810, 50, 60, 35, 955, 20, 30, 25, 870, 855, 820],
+    "G": [625, 640, 115, 20, 30, 25, 925, 35, 40, 55, 620, 650, 110, 15, 25, 20, 935, 30, 35, 45],
+    "T": [40, 40, 35, 20, 25, 915, 25, 75, 80, 95, 45, 40, 30, 18, 25, 930, 25, 75, 80, 90]
+  }
+}

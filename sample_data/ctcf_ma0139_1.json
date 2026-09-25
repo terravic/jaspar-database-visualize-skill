@@ -1,0 +1,47 @@
+{
+  "matrix_id": "MA0139.1",
+  "base_id": "MA0139",
+  "version": "1",
+  "name": "CTCF",
+  "collection": "CORE",
+  "tax_group": "vertebrates",
+  "species": [
+    {
+      "tax_id": 9606,
+      "name": "Homo sapiens"
+    }
+  ],
+  "class": [
+    "Zinc finger, C2H2-related"
+  ],
+  "family": [
+    "More than 3 adjacent zinc finger factors"
+  ],
+  "superclass": "Zinc-coordinating DNA-binding domains",
+  "subfamily": "CTCF-related insulator factors",
+  "type": "ChIP-seq",
+  "uniprot_ids": [
+    "P49711"
+  ],
+  "pdb_ids": [
+    "1X6H",
+    "5YEF",
+    "8SSS"
+  ],
+  "pubmed_ids": [
+    "17512414",
+    "38015438",
+    "41289102"
+  ],
+  "tffm": {
+    "tffm_id": "TFFM0089.3",
+    "log_p_1st_order": -198.4,
+    "log_p_detailed": -212.7
+  },
+  "pfm": {
+    "A": [87, 167, 281, 56, 8, 744, 40, 107, 851, 5, 333, 54, 12, 56, 104, 372, 82, 117, 402],
+    "C": [291, 145, 49, 800, 903, 13, 528, 433, 11, 0, 3, 12, 0, 8, 733, 13, 482, 322, 181],
+    "G": [76, 414, 449, 21, 0, 65, 334, 48, 32, 903, 566, 504, 890, 775, 5, 507, 307, 73, 266],
+    "T": [459, 187, 134, 36, 2, 91, 11, 325, 19, 5, 11, 343, 11, 74, 71, 21, 42, 401, 64]
+  }
+}
