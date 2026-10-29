@@ -2,7 +2,7 @@
 
 ## 1. Document Metadata & Overview
 - **Skill Identifier**: `jaspar-database-visualize`
-- **Version**: `2.2.0`
+- **Version**: `2.3.0`
 - **Domain**: Computational Biology / Gene Regulation / Transcription Factor Genomics
 - **Primary Upstream Data Source**: JASPAR REST API v1 (`https://jaspar.elixir.no/api/v1/`)
 - **Data License**: Creative Commons Attribution 4.0 International (`CC BY 4.0`)
@@ -27,6 +27,7 @@ The `jaspar-database-visualize` toolkit supports two primary user groups:
 
 All file paths in the repository are organized relative to the project root directory:
 
+- `DESIGN.md`: Dashboard visual, structural, and technical specification.
 - `LICENSE`: Apache License, Version 2.0 text.
 - `SKILL.md`: Operational specification and CLI reference for the skill.
 - `SKILL_LICENSES.md` & `.licenses/jaspar_database_visualize_LICENSE.txt`: Upstream JASPAR `CC BY 4.0` data license attribution records.
@@ -37,7 +38,8 @@ All file paths in the repository are organized relative to the project root dire
   - `dashboard_template.html`: Baseline interactive HTML5 dashboard template.
   - `jaspar_skill_workflow.png`: Technical architecture and data-flow diagram.
   - `motif_matrix_schema.json` & `scan_results_schema.json`: JSON Schema (Draft 2020-12) validation definitions.
-- `documents/prd.md`: Product Requirement Document (this specification).
+- `documents/`:
+  - `prd.md`: Product Requirement Document (this specification).
 - `references/`:
   - `api_endpoints.md`: JASPAR REST API v1 endpoint and rate-limit documentation.
   - `citation.bib`: BibTeX academic references for JASPAR 2026 and JASPAR 2024.
@@ -65,7 +67,7 @@ All file paths in the repository are organized relative to the project root dire
 
 ### 4.2 Module 2: Vector Sequence Logo Engine (`scripts/visualize_logo.py`)
 - Computes per-column total counts $N_i = \sum_{b \in \{A,C,G,T\}} C_{b,i}$, Shannon entropy $H_i = -\sum_{b} P_{b,i} \log_2(P_{b,i})$, small-sample correction $e_n = \frac{3}{2 \ln(2) N_i}$, and information content $R_i = \max(0, 2 - (H_i + e_n))$ in bits ($[0, 2]$).
-- Stacks vector `<path>` nucleotide glyphs (`A`: `#10B981`, `C`: `#3B82F6`, `G`: `#F59E0B`, `T`: `#EF4444`) sorted ascending by height $h_{b,i} = P_{b,i} \cdot R_i$.
+- Stacks vector `<path>` nucleotide glyphs sorted ascending by height $h_{b,i} = P_{b,i} \cdot R_i$.
 - Supports both Forward ($5' \to 3'$) and Reverse Complement ($3' \leftarrow 5'$) orientations and derives the 15-letter IUPAC degenerate consensus string (`A`, `C`, `G`, `T`, `R`, `Y`, `S`, `W`, `K`, `M`, `B`, `D`, `H`, `V`, `N`).
 
 ### 4.3 Module 3: Matrix Heatmap & Format Exporter (`scripts/visualize_matrix.py`)
@@ -81,12 +83,28 @@ All file paths in the repository are organized relative to the project root dire
 - Categorizes hits above the user threshold (`--threshold`, default `0.80`) into `Optimal` ($\ge 0.95$), `High` ($0.85 - 0.95$), and `Moderate` ($0.80 - 0.85$) tiers, and preserves the cleaned input sequence (`scan_data["sequence"]`) for downstream dashboard compilation.
 
 ### 4.5 Module 5: Unified Pipeline & Interactive HTML5 Dashboard (`scripts/run_pipeline.py` & `scripts/generate_dashboard.py`)
-- Compiles processed motif metadata, vector SVG sequence logos, PFM/PPM/PWM matrices, TFClass classifications, familial cluster comparisons, and dual-strand sequence scan results into a standalone `dashboard.html` file.
+- Compiles processed motif metadata, vector SVG sequence logos, PFM/PPM/PWM matrices, TFClass classifications, familial cluster comparisons, workspace provenance, validation telemetry, and dual-strand sequence scan results into a standalone `dashboard.html` file.
 - Embeds the processed state into `window.JASPAR_DASHBOARD_STATE`, ensuring that `dashboard.html` reflects the user-supplied TF profile and DNA sequence.
-- Interactive Dashboard Components:
-  - **Light / Dark Theme Switcher (`#themeToggleBtn`)**: Text-based header control (`Theme: Light` / `Theme: Dark`) that switches the dashboard palette between Light and Dark modes.
-  - **Input Data & Live Sequence Scanner**: Displays sequence statistics (length in bp, observed GC%, A/C/G/T base counts, total detected hits), an editable DNA sequence box, preset sequence loaders, a `+ Inject Motif Site` helper, a relative score threshold slider, and a **Run Sequence Scan** button with status feedback.
-  - **3D Interactive SVG Viewport (`#viewport3DSurface`)**: Renders an interactive 3D SVG **Motif Relationship Network** (linking the active TF hub to its TFClass domain, UniProt/PDB records, familial cluster paralogs, and top genomic binding hits) and a **3D DNA Binding Groove** (rendering the 3D B-DNA double-helix base pairs scaled by per-position bit information content $R_i$) with mouse drag rotation, scroll zoom, and node click inspection.
+- Supports incremental state updates via `window.updateDashboardState` and Server-Sent Events (`EventSource('/events')`) without resetting user scroll position, active tabs, or 3D viewport camera orientation.
+
+### 4.6 Dashboard Visual Hierarchy, Theme System, and Semantic Palette Specification
+- **Typography Hierarchy**: Pairs `DM Sans` / `Geist Sans` for UI controls and prose, `Instrument Serif` for display headers, and `IBM Plex Mono` / `Geist Mono` with `font-variant-numeric: tabular-nums` for numerical matrices, coordinates, and tables.
+- **Single-Level Bento Grid & Flat Surfaces**: Organizes panes in a single-level 12-column bento grid (`.bento-grid` / `.bento-pane`) with flat solid surface tokens, `1px solid` structural borders (`6px` to `8px` radius), and thin horizontal table row dividers.
+- **Three-Icon Segmented Theme Selector**:
+  - `#theme-btn-light`: Sun SVG icon (`title="Light Theme"`, `aria-label="Light Theme"`, `data-theme-mode="light"`).
+  - `#theme-btn-dark`: Crescent moon SVG icon (`title="Dark Theme"`, `aria-label="Dark Theme"`, `data-theme-mode="dark"`).
+  - `#theme-btn-system`: Computer monitor SVG icon (`title="System Theme"`, `aria-label="System Theme"`, `data-theme-mode="system"`).
+  - Tracks OS theme preference in real time via `window.matchMedia('(prefers-color-scheme: dark)')` and embeds a cross-platform host OS fallback (`detect_host_system_theme` querying macOS `defaults`, Windows `winreg`, or Linux `GTK_THEME`/`gsettings`/`kdeglobals`) in `window.JASPAR_DASHBOARD_STATE.system_theme`.
+- **Theme Color Tokens**:
+  - **Light Mode**: Background `#FAFAF9`, Cards & Surfaces `#FFFFFF`, Borders `#E7E5E4`, Text Primary `#1C1917`, Text Secondary `#787774`.
+  - **Dark Mode**: Background `#0D0E11`, Cards & Surfaces `#16171D`, Borders `#292A30`, Text Primary `#ECE8E2`, Text Secondary `#9A9895`.
+- **Semantic Data Visualization Palette**:
+  - **Vibrant Teal** (`#0D9488`): Primary data series, baseline metrics, structural bonds, nominal nodes.
+  - **Energetic Amber** (`#D97706`): Secondary data series, warning thresholds, intermediate intensity.
+  - **Vivid Indigo** (`#4F46E5`): Comparison series, distinct molecular groups, specialized network nodes.
+  - **Functional Emerald** (`#059669`): Passing metrics, positive outcomes, validated states.
+  - **Deep Rose** (`#E11D48`): Critical alerts, negative trends, threshold violations.
+- **Interactive 3D & Network Views (`#viewport3DSurface`)**: Toggles between **Interactive Relationship Node Map** (3D force-directed motif relationship topology) and **Structural Data Diagram** (3D B-DNA double-helix binding groove) with drag rotation, Shift+drag pan, wheel zoom, and node inspection.
 
 ---
 
@@ -141,6 +159,6 @@ All components are verified by the automated `pytest` suite (`tests/test_jaspar_
 2. `test_ppm_and_pwm_mathematics`: Verifies Laplace/Dirichlet pseudocount normalization and $\log_2$-odds PWM accuracy.
 3. `test_shannon_entropy_and_iupac_consensus`: Verifies Shannon entropy $H_i$, small-sample correction $e_n$, bit heights $R_i$, reverse-complement symmetry, and IUPAC degenerate mapping.
 4. `test_dual_strand_sequence_scanner_and_edge_cases`: Verifies forward (`+`) and reverse (`-`) strand hit detection, short-sequence warning handling, and the `>100 kb` sequence length check.
-5. `test_dashboard_generation_and_mandatory_citations`: Verifies `dashboard.html` state injection, JASPAR 2026/2024 citations, CC BY 4.0 attribution, and the experimental validation disclaimer.
+5. `test_dashboard_generation_and_mandatory_citations`: Verifies `dashboard.html` state injection, typography, three-icon Light/Dark/System theme switcher, Light/Dark hex tokens, semantic visualization palette, 3D component titles, JASPAR 2026/2024 citations, CC BY 4.0 attribution, and the experimental validation disclaimer.
 6. `test_cli_acceptance_suite`: Executes all CLI subcommands end-to-end.
 7. `test_custom_user_data_pipeline_and_dashboard_reflection`: Verifies that custom user DNA sequences and TFs outside `sample_data/` (`MYC` / `MA0147.3`) are processed and embedded directly into `dashboard.html`.

@@ -13,7 +13,7 @@ This toolkit comprises five integrated analytical modules:
 2. **Vector Sequence Logo Engine (`scripts/visualize_logo.py`)**: Computes per-position Shannon entropy ($H_i$), small-sample correction ($e_n$), and information content ($R_i = 2 - (H_i + e_n)$ bits) to generate scalable SVG and interactive HTML5 sequence logos across forward ($5' \to 3'$) and reverse-complement ($3' \leftarrow 5'$) orientations.
 3. **Matrix Heatmap & Information Explorer (`scripts/visualize_matrix.py`)**: Generates interactive heatmaps for PFM counts, PPM probabilities, and PWM $\log_2$-odds weights with configurable Laplace/Dirichlet pseudocounts and background GC fractions.
 4. **Dual-Strand DNA Sequence Scanner (`scripts/visualize_scan.py`)**: Scans user-provided FASTA files or inline DNA sequences across both forward (`+`) and reverse (`-`) strands, normalizes raw scores to relative affinity ($0.00 \text{ to } 1.00$), and maps binding site coordinates.
-5. **Standalone Interactive HTML5 Dashboard (`scripts/generate_dashboard.py` & `scripts/run_pipeline.py`)**: Compiles processed motif data and sequence scan results into a self-contained `dashboard.html` file featuring a Light/Dark theme toggle, live client-side sequence scanning, a 3D Motif Relationship Network, and a 3D DNA Binding Groove viewer.
+5. **Standalone Interactive HTML5 Dashboard (`scripts/generate_dashboard.py` & `scripts/run_pipeline.py`)**: Compiles processed motif data, provenance records, and sequence scan results into a self-contained `dashboard.html` file featuring Light, Dark, and System theme modes (`#theme-btn-light`, `#theme-btn-dark`, `#theme-btn-system`), live client-side sequence scanning, incremental state updates / Server-Sent Events (SSE), an Interactive Relationship Node Map, and a 3D Structural Data Diagram.
 
 ---
 
@@ -25,18 +25,18 @@ You do not need programming experience to use this skill. By providing a protein
 1. **Provide Your Protein Name or DNA Sequence**: Specify the transcription factor you want to study (for example, `MYC`, `TP53`, `CTCF`, `FOXA1`, or `SOX2`), and optionally supply a DNA sequence composed of `A`, `C`, `G`, and `T` letters or a `.fasta` sequence file.
 2. **Automated Binding Analysis**: The toolkit retrieves the experimentally validated binding profile from the JASPAR database, scores every position along both strands of your DNA sequence, and generates a visual report.
 3. **Explore the Interactive Report (`dashboard.html`)**: Open `dashboard.html` in any web browser. Within the dashboard, you can:
-   - Toggle between Light and Dark display themes using the **Theme: Light / Dark** button in the top-right corner.
-   - Read the **Sequence Logo**, where taller letters represent DNA positions that are strongly required for the protein to bind.
-   - Inspect the **Genomic Binding Sites** map and table, which pinpoint the exact start and end coordinates where the protein attaches on the forward (`+`) or reverse (`-`) DNA strand.
+   - Switch between **Light Theme**, **Dark Theme**, and automatic **System Theme** using the three-button selector in the top-right navigation bar.
+   - Read the **Information-Theoretic Sequence Logo**, where taller letters represent DNA positions that are strongly required for the protein to bind.
+   - Inspect the **Genomic Coordinate Binding Locus Map & Hit Table**, which pinpoints the exact start and end coordinates where the protein attaches on the forward (`+`) or reverse (`-`) DNA strand.
    - Paste or edit DNA sequences directly inside the **Input Data & Live Sequence Scanner** box, adjust the **Relative Cutoff** slider, and click **Run Sequence Scan** to test new sequences immediately.
-   - Drag to rotate and scroll to zoom the **Motif Relationship Network** and **3D DNA Binding Groove** models.
+   - Drag to rotate, Shift+drag to pan, and scroll to zoom the **Interactive Relationship Node Map** and **Structural Data Diagram** (3D B-DNA binding groove).
 
 ### Real-World Examples
 
 - **Example 1: Analyzing a Gene Promoter from a Laboratory Experiment**
   - *Scenario*: A researcher has isolated a 52-base-pair DNA segment upstream of a human gene (`GCTAGCTAGCGACCACGTGGTCGATCGATCGGACCACGTGGTCGATCGATCG`) and wants to determine whether the cell-growth regulator protein `MYC` binds to this region.
   - *How to run or request*: Specify the protein name `MYC` and the DNA sequence `GCTAGCTAGCGACCACGTGGTCGATCGATCGGACCACGTGGTCGATCGATCG`.
-  - *Result*: The skill resolves human `MYC` (`MA0147.3`), scans both DNA strands, detects the high-affinity `CACGTG` binding boxes at positions 11..22 and 32..43, and updates `dashboard.html` with the sequence statistics, locus map, and coordinate table.
+  - *Result*: The skill resolves human `MYC` (`MA0147.3`), scans both DNA strands, detects the high-affinity `CACGTG` binding boxes at positions 11..22 and 32..43, and updates `dashboard.html` with the sequence statistics, coordinate locus map, and hit table.
 
 - **Example 2: Evaluating Whether a Genetic Variant Alters Tumor Suppressor Binding**
   - *Scenario*: A clinician or student is reviewing a genetic report containing a single-letter DNA change in a regulatory region and wants to see if it weakens binding of the tumor suppressor protein `TP53`.
@@ -59,6 +59,7 @@ All file paths in this repository are defined relative to the project root direc
 |-- .gitignore
 |-- .licenses/
 |   +-- jaspar_database_visualize_LICENSE.txt
+|-- DESIGN.md
 |-- LICENSE
 |-- README.md
 |-- SKILL.md
@@ -178,9 +179,9 @@ The pipeline executes a three-stage workflow so that `dashboard.html` reflects t
 1. **Stage 1 -- Data Ingestion & Mathematical Processing**:
    `scripts/run_pipeline.py` resolves the target TF symbol or Matrix ID, calculates per-column Shannon information content ($R_i$), derives the $\log_2$-odds PWM, and scans both strands of the input sequence (`--sequence` or `--fasta`).
 2. **Stage 2 -- Dynamic Dashboard Compilation**:
-   `scripts/generate_dashboard.py` embeds the processed `motif.json`, `scan_hits.json`, and the cleaned nucleotide sequence into `window.JASPAR_DASHBOARD_STATE` inside `dashboard.html`.
+   `scripts/generate_dashboard.py` embeds the processed `motif.json`, `scan_hits.json`, host OS theme fallback (`system_theme`), provenance records, validation telemetry, and the cleaned nucleotide sequence into `window.JASPAR_DASHBOARD_STATE` inside `dashboard.html`.
 3. **Stage 3 -- Dashboard Output**:
-   The compiled `dashboard.html` is written to the output directory and `./dashboard.html`. All visual panels--including sequence length, GC percentage, base counts, sequence logo, PWM table, genomic locus map, and 3D network--reflect the processed input dataset.
+   The compiled `dashboard.html` is written to the output directory and `./dashboard.html`. All visual panes--including sequence length, GC percentage, base counts, sequence logo, PFM/PPM/PWM heatmap table, genomic coordinate locus map, Interactive Relationship Node Map, and Structural Data Diagram--reflect the processed input dataset.
 
 ---
 

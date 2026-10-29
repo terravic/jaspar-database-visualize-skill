@@ -158,7 +158,7 @@ def test_dual_strand_sequence_scanner_and_edge_cases() -> None:
 
 
 def test_dashboard_generation_and_mandatory_citations() -> None:
-    """Verifies standalone HTML5 dashboard contains all required cards, citations, and disclaimers."""
+    """Verifies standalone HTML5 dashboard contains all required components, tokens, citations, and disclaimers."""
     ctcf_data = load_mock_fixture("MA0139.1")
     html_doc = compile_dashboard_html(motif_data=ctcf_data)
 
@@ -169,6 +169,44 @@ def test_dashboard_generation_and_mandatory_citations() -> None:
     assert "doi:10.1093/nar/gkaf1209" in html_doc
     assert "Creative Commons Attribution 4.0 International (CC BY 4.0)" in html_doc
     assert "Predicted binding sites must be experimentally validated via ChIP-seq, CUT&RUN, or reporter assays." in html_doc
+
+    # Verify typography pairing and tabular numerals
+    for font_name in ("DM Sans", "Instrument Serif", "IBM Plex Mono", "tabular-nums"):
+        assert font_name in html_doc
+
+    # Verify three-icon theme selector and OS preference detection
+    assert 'id="theme-btn-light"' in html_doc
+    assert 'id="theme-btn-dark"' in html_doc
+    assert 'id="theme-btn-system"' in html_doc
+    assert 'data-theme-mode="light"' in html_doc
+    assert 'data-theme-mode="dark"' in html_doc
+    assert 'data-theme-mode="system"' in html_doc
+    assert "prefers-color-scheme: dark" in html_doc
+    assert '"system_theme":' in html_doc
+
+    # Verify light mode and dark mode surface, border, and text hex tokens
+    for token in (
+        "#FAFAF9",
+        "#FFFFFF",
+        "#E7E5E4",
+        "#1C1917",
+        "#787774",
+        "#0D0E11",
+        "#16171D",
+        "#292A30",
+        "#ECE8E2",
+        "#9A9895",
+    ):
+        assert token in html_doc, f"Missing theme color token {token}"
+
+    # Verify semantic data visualization palette and 3D component titles
+    for viz_hex in ("#0D9488", "#D97706", "#4F46E5", "#059669", "#E11D48"):
+        assert viz_hex in html_doc, f"Missing semantic visualization color {viz_hex}"
+    assert "Interactive Relationship Node Map" in html_doc
+    assert "Structural Data Diagram" in html_doc
+    assert "window.updateDashboardState" in html_doc
+    assert "EventSource" in html_doc
+
 
 
 def test_cli_acceptance_suite() -> None:

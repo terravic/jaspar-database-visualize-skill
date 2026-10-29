@@ -131,9 +131,9 @@ When generating outputs for a query, compile and save `dashboard.html` reflectin
 1. **Generate the Dashboard with Processed Data**: Run `scripts/run_pipeline.py` or `scripts/generate_dashboard.py` with the `--motif-json`, `--scan-json`, `--fasta`, or `--sequence` parameters.
 2. **Save Local Workspace Copy**: Write the compiled dashboard to `./dashboard.html` in the project root directory.
 3. **Interactive Components Included in `dashboard.html`**:
-   - **Light / Dark Theme Switcher**: Top-right header toggle (`#themeToggleBtn`) switching between light and dark color palettes.
+   - **Light / Dark / System Theme Selector**: Top-right segmented control (`#theme-btn-light`, `#theme-btn-dark`, `#theme-btn-system`) switching between light, dark, and automatic OS appearance modes.
    - **Input Data & Live Sequence Scanner**: Displays processed sequence metrics (length, GC%, base composition, total hits) and provides an editable sequence input with a **Run Sequence Scan** button that recalculates forward/reverse strand hits in real time.
-   - **Motif Relationship Network & 3D DNA Binding Groove**: Interactive SVG 3D viewer supporting mouse rotation, scroll zoom, and node inspection for both TF cluster topology and 3D B-DNA double-helix groove geometry.
+   - **Interactive Relationship Node Map & Structural Data Diagram**: Interactive 3D SVG viewer (`#viewport3DSurface`) supporting mouse rotation, Shift+drag pan, scroll zoom, and node inspection for both TF cluster topology and 3D B-DNA double-helix groove geometry.
    - **Sequence Logo & PFM/PPM/PWM Matrix Explorer**: Live toggles for forward/reverse-complement orientation, bits/probability scaling, pseudocount/GC sliders, and `JASPAR`/`MEME`/`TRANSFAC`/`YAML` exports.
 
 ---
